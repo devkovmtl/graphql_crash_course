@@ -34,9 +34,6 @@ const ProjectType = new GraphQLObjectType({
     id: {
       type: GraphQLID,
     },
-    clientId: {
-      type: GraphQLID,
-    },
     name: {
       type: GraphQLString,
     },
@@ -45,6 +42,14 @@ const ProjectType = new GraphQLObjectType({
     },
     status: {
       type: GraphQLString,
+    },
+    // add relationship
+    client: {
+      type: ClientType,
+      resolve(parent, args) {
+        // accept id === parent (project) id
+        return clients.find((client) => client.id === parent.clientId);
+      },
     },
   }),
 });
