@@ -1,4 +1,7 @@
-const { clients, projects } = require('../sampleData');
+// const { clients, projects } = require('../sampleData');
+// Mongoose models
+const Project = require('../models/Project');
+const Client = require('../models/Client');
 
 const {
   GraphQLObjectType,
@@ -48,7 +51,8 @@ const ProjectType = new GraphQLObjectType({
       type: ClientType,
       resolve(parent, args) {
         // accept id === parent (project) id
-        return clients.find((client) => client.id === parent.clientId);
+        // return clients.find((client) => client.id === parent.clientId);
+        return Client.findById(parent.clientId);
       },
     },
   }),
@@ -60,7 +64,8 @@ const RootQuery = new GraphQLObjectType({
     clients: {
       type: new GraphQLList(ClientType),
       resolve(parent, args) {
-        return clients;
+        // return clients;
+        return Client.find();
       },
     },
     client: {
@@ -69,20 +74,23 @@ const RootQuery = new GraphQLObjectType({
       // response
       resolve(parent, args) {
         // return data
-        return clients.find((client) => client.id === args.id);
+        // return clients.find((client) => client.id === args.id);
+        return Client.findById(args.id);
       },
     },
     projects: {
       type: new GraphQLList(ProjectType),
       resolve(parent, args) {
-        return projects;
+        // return projects;
+        return Project.find();
       },
     },
     project: {
       type: ProjectType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        return projects.find((project) => project.id === args.id);
+        // return projects.find((project) => project.id === args.id);
+        return Project.findById(args.id);
       },
     },
   },
